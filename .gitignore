@@ -1,0 +1,22 @@
+# Binaries
+vgu-mcp
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Go build cache
+/vendor/
+
+# Environment / secrets — never commit your Moodle token!
+.env
+.env.*
+opencode.json
+
+# OS
+.DS_Store
+Thumbs.db
