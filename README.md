@@ -8,13 +8,14 @@
 
 `vgu-mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server that connects AI coding assistants to VGU's Moodle platform. Once set up, your AI can:
 
-- 📚 List your enrolled courses
-- 📋 Fetch course content, sections, and materials
-- ⏰ Check upcoming assignment deadlines
-- 📊 View your grades
-- 📢 Read course announcements
-- 📥 Download lecture files directly
-- 📝 Submit assignment drafts
+- List your enrolled courses
+- Fetch course content, sections, and materials
+- Check upcoming assignment deadlines
+- View your grades
+- Read course announcements
+- Download lecture files directly
+- Extract and read PDF text — no extra tools needed
+- Submit assignment drafts
 
 ---
 
@@ -22,7 +23,7 @@
 
 ### 1. Download the binary
 
-Grab the latest release for your platform from [Releases](https://github.com/tuanha/vgu-mcp/releases):
+Grab the latest release for your platform from [Releases](https://github.com/haanhtuandev/vgu-mcp/releases):
 
 | Platform | File |
 |---|---|
@@ -35,7 +36,7 @@ Grab the latest release for your platform from [Releases](https://github.com/tua
 Or build from source (requires [Go 1.21+](https://go.dev/dl/)):
 
 ```bash
-git clone https://github.com/tuanha/vgu-mcp
+git clone https://github.com/haanhtuandev/vgu-mcp
 cd vgu-mcp
 make build
 ```
@@ -124,7 +125,18 @@ Once connected, your AI can use these tools automatically:
 | `get_course_grades` | Retrieves your grades for a course |
 | `read_course_announcements` | Reads the announcement forum for a course |
 | `download_course_material` | Downloads a lecture file to your local machine |
+| `extract_course_material_text` | Extracts plain text from a PDF — no tools needed, works offline |
 | `submit_assignment_draft` | Submits online-text content for an assignment |
+
+### `extract_course_material_text` — How it works
+
+This tool downloads a PDF from Moodle and extracts its text content **entirely in Go** — no `pdftotext`, no Python, no system packages required. The AI gets the full text in its context window immediately and can summarise, quiz, or explain the material without any extra steps.
+
+It accepts either:
+- **`file_url`** — a `fileurl` from `get_course_contents` (the tool fetches and extracts in one step)
+- **`local_filepath`** — a path to an already-downloaded PDF on your machine
+
+> **Note:** Only text-based PDFs are supported. Scanned/image PDFs have no text layer to extract.
 
 **Example prompts to try:**
 - *"What courses am I enrolled in this semester?"*
@@ -132,6 +144,9 @@ Once connected, your AI can use these tools automatically:
 - *"Do I have any assignments due this week?"*
 - *"What grades do I have in Operating Systems?"*
 - *"Download the lecture slides from week 3 of my OS course"*
+- *"Read the week 3 OS lecture PDF and summarise it for me"*
+- *"Quiz me on the contents of the Lab 2 specification"*
+- *"Explain the concept from page 2 of the distributed systems slides"*
 
 ---
 
@@ -189,19 +204,22 @@ make tidy     # tidy go.mod
 ```
 vgu-mcp/
 ├── cmd/vgu-mcp/
-│   ├── main.go          # Entry point & subcommand routing
-│   └── setup.go         # Interactive credential setup
+│   ├── main.go              # Entry point & subcommand routing
+│   └── setup.go             # Interactive credential setup
 ├── internal/
 │   ├── config/
-│   │   └── config.go    # Load/Save config from env or ~/.config/vgu-mcp/
+│   │   └── config.go        # Load/Save config from env or ~/.config/vgu-mcp/
+│   ├── extractor/
+│   │   └── pdf.go           # Pure-Go PDF text extraction (no system deps)
 │   ├── moodle/
-│   │   ├── auth.go      # Login via login/token.php
-│   │   ├── client.go    # Moodle Web Services HTTP client
-│   │   ├── downloader.go # Streaming file downloader
-│   │   └── types.go     # Moodle API types
+│   │   ├── auth.go          # Login via login/token.php
+│   │   ├── client.go        # Moodle Web Services HTTP client
+│   │   ├── downloader.go    # File downloader (stream-to-disk + in-memory fetch)
+│   │   └── types.go         # Moodle API types
 │   └── tools/
 │       ├── courses.go       # get_enrolled_courses, get_course_contents
 │       ├── deadlines.go     # get_upcoming_deadlines
+│       ├── extractor.go     # extract_course_material_text
 │       ├── grades.go        # get_course_grades
 │       ├── materials.go     # download_course_material
 │       ├── announcements.go # read_course_announcements
@@ -213,14 +231,14 @@ vgu-mcp/
 
 ## Contributing
 
-This project was made by VGU students, for VGU students. If you want to add more tools (SIS integration, timetable, etc.), contributions are very welcome.
+This project was made by VGU students, for VGU students. If you want to add more tools (SIS integration, timetable, DOCX extraction, etc.), contributions are very welcome.
 
 1. Fork the repo
 2. Add your tool in `internal/tools/`
 3. Register it in `cmd/vgu-mcp/main.go`
 4. Open a pull request
 
-See the existing tools as reference — each one is just ~40 lines of Go.
+See the existing tools as reference — each one is ~40–60 lines of Go.
 
 ---
 
