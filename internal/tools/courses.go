@@ -10,13 +10,14 @@ import (
 	"github.com/tuanha/vgu-mcp/internal/moodle"
 )
 
-func RegisterCourseTools(server *server.MCPServer, client *moodle.Client) {
-	server.AddTool(mcp.NewTool(
+// RegisterCourseTools registers MCP tools for course listing and content.
+func RegisterCourseTools(s *server.MCPServer, client *moodle.Client) {
+	s.AddTool(mcp.NewTool(
 		"get_enrolled_courses",
 		mcp.WithDescription("Fetch all Moodle courses enrolled by the authenticated user"),
 	), getEnrolledCourses(client))
 
-	server.AddTool(mcp.NewTool(
+	s.AddTool(mcp.NewTool(
 		"get_course_contents",
 		mcp.WithDescription("Fetch sections, modules, and learning materials for a given course ID"),
 		mcp.WithNumber("courseid", mcp.Required(), mcp.Description("The Moodle course ID")),
@@ -51,10 +52,11 @@ func getCourseContents(client *moodle.Client) server.ToolHandlerFunc {
 	}
 }
 
+// jsonResult marshals any value to indented JSON and wraps it in a text tool result.
 func jsonResult(value any) (*mcp.CallToolResult, error) {
 	data, err := json.MarshalIndent(value, "", "  ")
 	if err != nil {
-		return mcp.NewToolResultError("format JSON output"), nil
+		return mcp.NewToolResultError("failed to format JSON output"), nil
 	}
 	return mcp.NewToolResultText(string(data)), nil
 }
