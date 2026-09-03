@@ -172,6 +172,22 @@ command = "vgu-mcp"
 
 Restart Codex after saving.
 
+### Antigravity CLI
+
+Add to `~/.gemini/config/mcp_config.json` (global) or `.agents/mcp_config.json` (per project):
+
+```json
+{
+  "mcpServers": {
+    "vgu-moodle": {
+      "command": "vgu-mcp"
+    }
+  }
+}
+```
+
+Alternatively, run `/mcp` inside the Antigravity CLI to manage servers interactively.
+
 ### Cursor
 
 Open **Settings → Features → MCP → Add new MCP server**:

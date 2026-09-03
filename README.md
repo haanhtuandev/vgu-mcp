@@ -119,6 +119,21 @@ command = "vgu-mcp"
 </details>
 
 <details>
+<summary><strong>Antigravity CLI</strong></summary>
+
+Add to `~/.gemini/config/mcp_config.json` (global) or `.agents/mcp_config.json` (per project):
+```json
+{
+  "mcpServers": {
+    "vgu-moodle": { "command": "vgu-mcp" }
+  }
+}
+```
+
+Or run `/mcp` inside the Antigravity CLI to add it interactively.
+</details>
+
+<details>
 <summary><strong>Cursor / other MCP clients</strong></summary>
 
 Set the command to `vgu-mcp`. No arguments or environment variables required.
