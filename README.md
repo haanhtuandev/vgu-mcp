@@ -4,10 +4,14 @@
 [![MCP](https://img.shields.io/badge/MCP-compatible-6f42c1?style=flat)](https://modelcontextprotocol.io)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/haanhtuandev/vgu-mcp?style=flat)](https://github.com/haanhtuandev/vgu-mcp/releases)
+[![GitHub stars](https://img.shields.io/github/stars/haanhtuandev/vgu-mcp?style=flat&label=%E2%98%85%20Stars)](https://github.com/haanhtuandev/vgu-mcp/stargazers)
 
 > **Your AI assistant, connected to VGU Moodle.**
 > Ask it about deadlines, read lecture PDFs, check grades, stage assignment files —
 > all without opening a browser.
+
+> **Found it helpful? Give it a ★** on [GitHub](https://github.com/haanhtuandev/vgu-mcp) —
+> it helps other VGU students discover it.
 
 ---
 
