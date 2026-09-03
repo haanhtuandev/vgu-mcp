@@ -183,13 +183,26 @@ func (c *Client) GetForumDiscussions(ctx context.Context, forumID int) ([]Discus
 	return result.Discussions, nil
 }
 
-// SaveAssignmentSubmission submits online text for an assignment.
-func (c *Client) SaveAssignmentSubmission(ctx context.Context, assignmentID int, text string) error {
+// BaseURL returns the Moodle base URL configured for this client.
+// Used by tool handlers to construct direct links (e.g. assignment review URLs).
+func (c *Client) BaseURL() string { return c.baseURL }
+
+// StageAssignmentDraft saves a file and/or online text to a Moodle assignment
+// as a Draft (not submitted for grading). The student must manually click
+// "Submit assignment" in the Moodle UI to finalize.
+//
+// At least one of draftItemID (>0) or text (non-empty) must be provided.
+func (c *Client) StageAssignmentDraft(ctx context.Context, assignmentID, draftItemID int, text string) error {
 	params := url.Values{
-		"assignmentid":                          {fmt.Sprintf("%d", assignmentID)},
-		"plugindata[onlinetext_editor][text]":   {text},
-		"plugindata[onlinetext_editor][format]": {"1"},
-		"plugindata[onlinetext_editor][itemid]": {"0"},
+		"assignmentid": {fmt.Sprintf("%d", assignmentID)},
+	}
+	if draftItemID != 0 {
+		params.Set("plugindata[files_filemanager]", fmt.Sprintf("%d", draftItemID))
+	}
+	if text != "" {
+		params.Set("plugindata[onlinetext_editor][text]", text)
+		params.Set("plugindata[onlinetext_editor][format]", "1")
+		params.Set("plugindata[onlinetext_editor][itemid]", "0")
 	}
 	var warnings []any
 	return c.request(ctx, "mod_assign_save_submission", params, &warnings)

@@ -107,3 +107,13 @@ type Discussion struct {
 	UserFullName string `json:"userfullname"`
 	NumReplies   int    `json:"numreplies"`
 }
+
+// UploadResponse is a single element of the JSON array returned by
+// /webservice/upload.php after a successful multipart file upload.
+type UploadResponse struct {
+	ItemID    int    `json:"itemid"`
+	Filename  string `json:"filename"`
+	ContextID int    `json:"contextid"`
+	UserID    string `json:"userid"`
+	FileArea  string `json:"filearea"`
+}

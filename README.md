@@ -1,247 +1,97 @@
-# VGU MCP Server
+# VGU MCP
 
-> **Let your AI assistant talk to Moodle.** Ask OpenCode, Claude, or Cursor "what assignments do I have?" and get real answers from VGU's Moodle — no copy-pasting, no browser digging.
+[![Go](https://img.shields.io/badge/go-1.21+-00ADD8?style=flat&logo=go)](https://go.dev)
+[![MCP](https://img.shields.io/badge/MCP-compatible-6f42c1?style=flat)](https://modelcontextprotocol.io)
+[![License](https://img.shields.io/badge/license-MIT-green?style=flat)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/haanhtuandev/vgu-mcp?style=flat)](https://github.com/haanhtuandev/vgu-mcp/releases)
 
----
-
-## What is this?
-
-`vgu-mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server that connects AI coding assistants to VGU's Moodle platform. Once set up, your AI can:
-
-- List your enrolled courses
-- Fetch course content, sections, and materials
-- Check upcoming assignment deadlines
-- View your grades
-- Read course announcements
-- Download lecture files directly
-- Extract and read PDF text — no extra tools needed
-- Submit assignment drafts
+> **Your AI assistant, connected to VGU Moodle.**
+> Ask it about deadlines, read lecture PDFs, check grades, stage assignment files —
+> all without opening a browser.
 
 ---
 
-## Quick Start
+## What you can do
 
-### 1. Download the binary
+- Ask about upcoming deadlines and grades in plain English
+- Browse and download course materials
+- Read PDF lecture notes — extracted and summarised instantly, no extra tools needed
+- Stage assignment files as drafts on Moodle for your review before submitting
 
-Grab the latest release for your platform from [Releases](https://github.com/haanhtuandev/vgu-mcp/releases):
+---
 
-| Platform | File |
-|---|---|
-| macOS (Apple Silicon M1/M2/M3) | `vgu-mcp-*-darwin-arm64.zip` |
-| macOS (Intel) | `vgu-mcp-*-darwin-amd64.zip` |
-| Linux (x86_64) | `vgu-mcp-*-linux-amd64.zip` |
-| Linux (ARM) | `vgu-mcp-*-linux-arm64.zip` |
-| Windows | `vgu-mcp-*-windows-amd64.zip` |
+## Get started in 3 steps
 
-Or build from source (requires [Go 1.21+](https://go.dev/dl/)):
+**1. Download** the binary for your platform from
+[Releases →](https://github.com/haanhtuandev/vgu-mcp/releases)
 
-```bash
-git clone https://github.com/haanhtuandev/vgu-mcp
-cd vgu-mcp
-make build
-```
-
-### 2. Run setup (one-time)
-
+**2. Authenticate** once with your VGU credentials:
 ```bash
 ./vgu-mcp setup
 ```
+Your password is never saved — only a web service token is stored locally.
 
-You'll be prompted for your VGU student credentials:
+**3. Connect** to your AI client:
 
-```
-Moodle URL [https://moodle.vgu.edu.vn]: ↵
-Username: 10423118
-Password: ••••••••
+<details>
+<summary><strong>OpenCode</strong></summary>
 
-✓ Login successful. Welcome, Ha Anh Tuan!
-✓ Credentials saved to ~/.config/vgu-mcp/config.json
-```
-
-> **Your password is never saved.** Only the Moodle web service token is stored locally at `~/.config/vgu-mcp/config.json`.
-
-If automatic login fails (e.g. your account uses SSO), you'll be prompted to paste your token manually:
-> Moodle → Profile → Preferences → **Security keys** → copy your Web Service token
-
-### 3. Install (optional but recommended)
-
-```bash
-make install
-# or manually:
-sudo cp vgu-mcp /usr/local/bin/vgu-mcp
-```
-
-This lets AI clients find the binary by name without a full path.
-
----
-
-## Connect to Your AI Client
-
-### OpenCode
-
-Add this to `~/.config/opencode/opencode.json`:
-
+Add to `~/.config/opencode/opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "vgu-moodle": {
-      "type": "local",
-      "command": ["vgu-mcp"]
-    }
+    "vgu-moodle": { "type": "local", "command": ["vgu-mcp"] }
   }
 }
 ```
+</details>
 
-### Claude Desktop
+<details>
+<summary><strong>Claude Desktop</strong></summary>
 
-Add this to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
-
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or
+`%APPDATA%\Claude\claude_desktop_config.json` (Windows):
 ```json
 {
   "mcpServers": {
-    "vgu-moodle": {
-      "command": "vgu-mcp"
-    }
+    "vgu-moodle": { "command": "vgu-mcp" }
   }
 }
 ```
+</details>
 
-### Cursor / Other MCP clients
+<details>
+<summary><strong>Cursor / other MCP clients</strong></summary>
 
-Use `vgu-mcp` (or the full path if not installed) as the command. No arguments, no env vars needed.
+Set the command to `vgu-mcp`. No arguments or environment variables required.
+</details>
+
+→ See the [Getting Started guide](docs/getting-started.md) for full setup instructions and troubleshooting.
 
 ---
 
-## Available Tools
+## Try these prompts
 
-Once connected, your AI can use these tools automatically:
+Once connected, just type naturally in your AI chat:
 
-| Tool | What it does |
+- *"What assignments do I have due this week?"*
+- *"Summarise the week 3 OS lecture slides for me"*
+- *"Show me my grades for Distributed Systems"*
+- *"Stage my lab2.zip to the component design assignment as a draft"*
+- *"Quiz me on the Lab 2 specification PDF"*
+
+---
+
+## Docs
+
+| | |
 |---|---|
-| `get_enrolled_courses` | Lists all your enrolled Moodle courses |
-| `get_course_contents` | Fetches sections, modules, and files for a course |
-| `get_upcoming_deadlines` | Shows upcoming assignment deadlines |
-| `get_course_grades` | Retrieves your grades for a course |
-| `read_course_announcements` | Reads the announcement forum for a course |
-| `download_course_material` | Downloads a lecture file to your local machine |
-| `extract_course_material_text` | Extracts plain text from a PDF — no tools needed, works offline |
-| `submit_assignment_draft` | Submits online-text content for an assignment |
-
-### `extract_course_material_text` — How it works
-
-This tool downloads a PDF from Moodle and extracts its text content **entirely in Go** — no `pdftotext`, no Python, no system packages required. The AI gets the full text in its context window immediately and can summarise, quiz, or explain the material without any extra steps.
-
-It accepts either:
-- **`file_url`** — a `fileurl` from `get_course_contents` (the tool fetches and extracts in one step)
-- **`local_filepath`** — a path to an already-downloaded PDF on your machine
-
-> **Note:** Only text-based PDFs are supported. Scanned/image PDFs have no text layer to extract.
-
-**Example prompts to try:**
-- *"What courses am I enrolled in this semester?"*
-- *"Show me all the materials from my Distributed Systems course"*
-- *"Do I have any assignments due this week?"*
-- *"What grades do I have in Operating Systems?"*
-- *"Download the lecture slides from week 3 of my OS course"*
-- *"Read the week 3 OS lecture PDF and summarise it for me"*
-- *"Quiz me on the contents of the Lab 2 specification"*
-- *"Explain the concept from page 2 of the distributed systems slides"*
+| [Getting Started](docs/getting-started.md) | Download, setup, AI client configuration |
+| [Tool Reference](docs/tools.md) | All tools, parameters, and example prompts |
+| [Configuration](docs/configuration.md) | Config file, environment variables, re-authentication |
+| [Contributing](docs/contributing.md) | Project structure, adding tools, building from source |
 
 ---
 
-## Configuration
-
-Credentials are stored in `~/.config/vgu-mcp/config.json` after running `vgu-mcp setup`:
-
-```json
-{
-  "moodle_url": "https://moodle.vgu.edu.vn",
-  "moodle_token": "your_token_here",
-  "userid": 2197
-}
-```
-
-You can also configure via environment variables (useful for CI or advanced setups):
-
-```bash
-export MOODLE_URL="https://moodle.vgu.edu.vn"
-export MOODLE_TOKEN="your_token_here"
-vgu-mcp
-```
-
-Environment variables take precedence over the config file.
-
----
-
-## Re-authenticate
-
-If your token expires or you get auth errors, just re-run setup:
-
-```bash
-vgu-mcp setup
-```
-
----
-
-## Build from Source
-
-```bash
-git clone https://github.com/tuanha/vgu-mcp
-cd vgu-mcp
-
-make build    # build binary
-make test     # run tests
-make install  # install to /usr/local/bin
-make dist     # cross-compile for all platforms (output: dist/)
-make tidy     # tidy go.mod
-```
-
----
-
-## Project Structure
-
-```
-vgu-mcp/
-├── cmd/vgu-mcp/
-│   ├── main.go              # Entry point & subcommand routing
-│   └── setup.go             # Interactive credential setup
-├── internal/
-│   ├── config/
-│   │   └── config.go        # Load/Save config from env or ~/.config/vgu-mcp/
-│   ├── extractor/
-│   │   └── pdf.go           # Pure-Go PDF text extraction (no system deps)
-│   ├── moodle/
-│   │   ├── auth.go          # Login via login/token.php
-│   │   ├── client.go        # Moodle Web Services HTTP client
-│   │   ├── downloader.go    # File downloader (stream-to-disk + in-memory fetch)
-│   │   └── types.go         # Moodle API types
-│   └── tools/
-│       ├── courses.go       # get_enrolled_courses, get_course_contents
-│       ├── deadlines.go     # get_upcoming_deadlines
-│       ├── extractor.go     # extract_course_material_text
-│       ├── grades.go        # get_course_grades
-│       ├── materials.go     # download_course_material
-│       ├── announcements.go # read_course_announcements
-│       └── assignments.go   # submit_assignment_draft
-└── Makefile
-```
-
----
-
-## Contributing
-
-This project was made by VGU students, for VGU students. If you want to add more tools (SIS integration, timetable, DOCX extraction, etc.), contributions are very welcome.
-
-1. Fork the repo
-2. Add your tool in `internal/tools/`
-3. Register it in `cmd/vgu-mcp/main.go`
-4. Open a pull request
-
-See the existing tools as reference — each one is ~40–60 lines of Go.
-
----
-
-## License
-
-MIT
+MIT License — made by VGU students, for VGU students.
