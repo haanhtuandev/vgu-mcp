@@ -11,6 +11,28 @@
 
 ---
 
+## See it in action
+
+Ask about your courses, deadlines and grades in plain English:
+
+<p align="center">
+  <img src="assets/demo-courses.png" alt="Asking about upcoming courses in plain English" width="720">
+</p>
+
+Or ask it to summarise a lecture PDF straight from Moodle:
+
+<p align="center">
+  <img src="assets/demo-summarise.png" alt="Asking for a lecture PDF summary" width="720">
+</p>
+
+Even have it write an assignment and stage it as a draft for your review before submitting:
+
+<p align="center">
+  <img src="assets/draft-assignment.png" alt="Asking the agent to implement and draft-upload an assignment" width="720">
+</p>
+
+---
+
 ## What you can do
 
 - Ask about upcoming deadlines and grades in plain English
