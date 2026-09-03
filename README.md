@@ -22,12 +22,33 @@
 
 ## Get started in 3 steps
 
-**1. Download** the binary for your platform from
-[Releases →](https://github.com/haanhtuandev/vgu-mcp/releases)
+**1. Install** the binary with one command:
+
+<details>
+<summary><strong>macOS & Linux</strong></summary>
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/haanhtuandev/vgu-mcp/main/scripts/install.sh | sh
+```
+
+Installs to `~/.local/bin` (no sudo needed), verifies the checksum, and adds it to your `PATH`.
+Prefer a manual download? Grab the `tar.gz` for your platform from [Releases →](https://github.com/haanhtuandev/vgu-mcp/releases) and put `vgu-mcp` on your `PATH`.
+</details>
+
+<details>
+<summary><strong>Windows</strong></summary>
+
+```powershell
+irm https://raw.githubusercontent.com/haanhtuandev/vgu-mcp/main/scripts/install.ps1 | iex
+```
+
+Installs `vgu-mcp.exe` to `%LOCALAPPDATA%\Programs\vgu-mcp` and adds it to your user `PATH`.
+Or just download the `.zip` from [Releases →](https://github.com/haanhtuandev/vgu-mcp/releases) and unzip it.
+</details>
 
 **2. Authenticate** once with your VGU credentials:
 ```bash
-./vgu-mcp setup
+vgu-mcp setup
 ```
 Your password is never saved — only a web service token is stored locally.
 

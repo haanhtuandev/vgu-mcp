@@ -12,19 +12,50 @@ This guide walks you through installing `vgu-mcp`, authenticating with your VGU 
 
 ---
 
-## 1. Download the binary
+## 1. Install the binary
 
-Grab the latest release for your platform from [GitHub Releases](https://github.com/haanhtuandev/vgu-mcp/releases):
+### macOS & Linux
+
+One command, no sudo — installs to `~/.local/bin` and adds it to your `PATH`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/haanhtuandev/vgu-mcp/main/scripts/install.sh | sh
+```
+
+To pin a specific release instead of the latest:
+
+```bash
+VGU_MCP_VERSION=v0.1.2 curl -fsSL https://raw.githubusercontent.com/haanhtuandev/vgu-mcp/main/scripts/install.sh | sh
+```
+
+The script verifies the SHA-256 checksum before installing, and on macOS clears the quarantine flag so Gatekeeper lets the (unsigned) binary run. Re-run the same command any time to upgrade.
+
+### Windows
+
+One command — installs `vgu-mcp.exe` to `%LOCALAPPDATA%\Programs\vgu-mcp` and adds it to your user `PATH`:
+
+```powershell
+irm https://raw.githubusercontent.com/haanhtuandev/vgu-mcp/main/scripts/install.ps1 | iex
+```
+
+### Manual download
+
+Prefer to grab the files yourself? Download the archive for your platform from
+[GitHub Releases](https://github.com/haanhtuandev/vgu-mcp/releases), unzip it, and place `vgu-mcp`/`vgu-mcp.exe` somewhere on your `PATH`:
 
 | Platform | File |
 |---|---|
-| macOS (Apple Silicon M1/M2/M3) | `vgu-mcp-*-darwin-arm64.zip` |
-| macOS (Intel) | `vgu-mcp-*-darwin-amd64.zip` |
-| Linux (x86_64) | `vgu-mcp-*-linux-amd64.zip` |
-| Linux (ARM) | `vgu-mcp-*-linux-arm64.zip` |
+| macOS (Apple Silicon M1/M2/M3) | `vgu-mcp-*-darwin-arm64.tar.gz` |
+| macOS (Intel) | `vgu-mcp-*-darwin-amd64.tar.gz` |
+| Linux (x86_64) | `vgu-mcp-*-linux-amd64.tar.gz` |
+| Linux (ARM) | `vgu-mcp-*-linux-arm64.tar.gz` |
 | Windows | `vgu-mcp-*-windows-amd64.zip` |
 
-Unzip and place the binary somewhere convenient (e.g. your home directory or project folder).
+Verify the install with:
+
+```bash
+vgu-mcp version
+```
 
 ### Build from source
 
@@ -43,7 +74,7 @@ make build
 Run the setup command:
 
 ```bash
-./vgu-mcp setup
+vgu-mcp setup
 ```
 
 You'll be prompted for your VGU student credentials:
@@ -74,17 +105,17 @@ Go to Moodle in your browser → click your profile photo → **Preferences** �
 
 ---
 
-## 3. Install globally (optional but recommended)
+## 3. Put the binary on your PATH (manual installs only)
 
-Installing to `/usr/local/bin` lets AI clients find the binary by name without a full path:
+The install scripts in step 1 already add `vgu-mcp` to your `PATH`. If you downloaded the archive manually or built from source, make sure the binary is reachable by name — AI clients call `vgu-mcp` without a full path:
 
 ```bash
-make install
-# or manually:
-sudo cp vgu-mcp /usr/local/bin/vgu-mcp
+sudo cp vgu-mcp /usr/local/bin/vgu-mcp   # or use your own bin dir already on PATH
 ```
 
-On Windows, add the folder containing `vgu-mcp.exe` to your `PATH`.
+On Windows, add the folder containing `vgu-mcp.exe` to your user `PATH`.
+
+Verify with `vgu-mcp version` before moving on.
 
 ---
 
