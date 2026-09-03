@@ -109,6 +109,16 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 </details>
 
 <details>
+<summary><strong>Codex</strong></summary>
+
+Add to `~/.codex/config.toml`:
+```toml
+[mcp_servers.vgu-moodle]
+command = "vgu-mcp"
+```
+</details>
+
+<details>
 <summary><strong>Cursor / other MCP clients</strong></summary>
 
 Set the command to `vgu-mcp`. No arguments or environment variables required.

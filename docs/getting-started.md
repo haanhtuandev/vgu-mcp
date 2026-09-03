@@ -161,6 +161,17 @@ If you haven't installed globally, use the full path:
 
 Restart Claude Desktop after saving.
 
+### Codex
+
+Edit `~/.codex/config.toml` and add:
+
+```toml
+[mcp_servers.vgu-moodle]
+command = "vgu-mcp"
+```
+
+Restart Codex after saving.
+
 ### Cursor
 
 Open **Settings → Features → MCP → Add new MCP server**:
